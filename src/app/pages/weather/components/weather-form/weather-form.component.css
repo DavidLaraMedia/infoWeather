@@ -1,0 +1,23 @@
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.flex-item {
+    flex: 33%;
+    text-align: center;
+}
+.consultar {
+    margin-top: 15px;
+}
+  
+@media (min-width: 576px) {
+    .flex-container {
+        flex-direction: row;
+    }
+    .consultar {
+        margin-top: unset;
+    }
+}
+
+  

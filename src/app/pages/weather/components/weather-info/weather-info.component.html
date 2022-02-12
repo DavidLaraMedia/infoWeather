@@ -1,0 +1,9 @@
+<div *ngIf="loading$ | async as loading">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>  
+</div>
+<div *ngIf="infoWeather$ | async as infoWeather">
+    <p>Ciudad: {{infoWeather.cityName}}</p>
+    <p>Clima: {{infoWeather.temp}}</p>    
+    <p>ST: {{infoWeather.fellsLike}}</p>  
+</div>
+

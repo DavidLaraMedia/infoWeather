@@ -1,0 +1,38 @@
+<form (ngSubmit)="callApi()" [formGroup]="form">
+
+    <div class="flex-container">
+      <div class="flex-item">
+        <mat-form-field appearance="fill">
+          <mat-label>Seleccione la ciudad</mat-label>
+          <mat-select formControlName="city" >
+            <mat-option *ngFor="let city of cities" [value]="city.name">
+              {{city.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="flex-item">
+        <mat-checkbox 
+          formControlName="includeHistory"
+          class="example-margin"
+          color="primary"
+          >
+          Incluir histórico
+       </mat-checkbox>
+      </div>
+
+      <div class="flex-item consultar">
+        <button 
+          type="submit" 
+          mat-raised-button
+          color="primary"
+          >
+            Consultar
+        </button>
+      </div>
+
+    </div>
+
+</form>
+
