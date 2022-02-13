@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { WeatherService } from 'src/app/services/weather.service';
 
 @Component({
@@ -9,19 +9,11 @@ import { WeatherService } from 'src/app/services/weather.service';
 })
 export class WeatherFormComponent implements OnInit {
 
-  cities = [
-    {name: 'Buenos Aires'},
-    {name: 'Caracas'},
-    {name: 'Maturin'},
-    {name: 'Cordoba'},
-    {name: 'dsfgsdfghd'}
-  ];
-
   form: FormGroup;
 
   constructor(private weatherService: WeatherService, private formBuilder: FormBuilder) {
     this.form = this.formBuilder.group({
-      city: [''],
+      city: ['', Validators.required],
       includeHistory: false
     })
    }
@@ -29,8 +21,10 @@ export class WeatherFormComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  callApi() {
-    this.weatherService.getWeather(this.form.get('city')?.value, this.form.get('includeHistory')?.value);
+  onSubmit() {
+    if (this.form.valid) {
+      this.weatherService.getWeather(this.form.get('city')?.value, this.form.get('includeHistory')?.value);
+    }
   }
 
 

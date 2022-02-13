@@ -1,14 +1,11 @@
-<form (ngSubmit)="callApi()" [formGroup]="form">
+<form (ngSubmit)="onSubmit()" [formGroup]="form">
 
     <div class="flex-container">
+
       <div class="flex-item">
-        <mat-form-field appearance="fill">
-          <mat-label>Seleccione la ciudad</mat-label>
-          <mat-select formControlName="city" >
-            <mat-option *ngFor="let city of cities" [value]="city.name">
-              {{city.name}}
-            </mat-option>
-          </mat-select>
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Escriba la ciudad</mat-label>
+          <input required matInput placeholder="Ej. Buenos Aires" formControlName="city">
         </mat-form-field>
       </div>
 

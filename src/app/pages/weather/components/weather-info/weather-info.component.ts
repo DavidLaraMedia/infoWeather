@@ -10,6 +10,7 @@ export class WeatherInfoComponent implements OnInit {
 
   infoWeather$ = this.weatherService.infoWeather$;
   loading$ = this.weatherService.loading$;
+  errorMessage$ = this.weatherService.error$;
 
   constructor(private weatherService: WeatherService) { }
 

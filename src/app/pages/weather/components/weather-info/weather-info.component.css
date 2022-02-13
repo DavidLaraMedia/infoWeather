@@ -1,0 +1,28 @@
+.bold {
+    font-weight: 500;
+}
+
+.error {
+    font-weight: 600;
+    color: rgb(151, 15, 15)
+}
+
+.info-container {
+    margin: 10px 0 10px 0;
+    padding: 10px;
+    background-color: rgb(241, 241, 241);
+    box-sizing: border-box;
+}
+
+.info-container p {
+    margin: 0;
+}
+
+@media (min-width: 576px) {
+    .info-container {
+        margin-bottom: 20px;
+    }
+    .info-container p {
+        margin: 2px 0 2px 0;
+    }
+}

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 export interface InfoWeather {
@@ -15,12 +16,14 @@ export interface InfoWeather {
 })
 export class WeatherService {
 
-  private infoWeather = new BehaviorSubject<InfoWeather>({
+  private infoWeatherDefault: InfoWeather = {
     country: '',
     cityName: '',
     temp: null,
     fellsLike: null
-  });
+  };
+
+  private infoWeather = new BehaviorSubject<InfoWeather>(this.infoWeatherDefault);
   infoWeather$ = this.infoWeather.asObservable();
 
   private cityHistory = new BehaviorSubject<InfoWeather[]>([]);
@@ -29,17 +32,28 @@ export class WeatherService {
   private loading = new BehaviorSubject<boolean>(false);
   loading$ = this.loading.asObservable();
 
-  private errorLoading = new BehaviorSubject<boolean>(false);
-  errorLoading$ = this.errorLoading.asObservable();
+  private error = new BehaviorSubject<boolean>(false);
+  error$ = this.error.asObservable();
 
   constructor(private httpClient: HttpClient) { }
 
-  apiKey = environment.apiKey;
+  private readonly apiKey = environment.apiKey;
+  private readonly WEATHER_HISTORY = 'WEATHER_HISTORY';
 
   getWeather(city: string, includeHistory: boolean) {
+    this.error.next(false);
     this.loading.next(true);
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${this.apiKey}`
-    this.httpClient.get(url).subscribe((res: any) => {
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${this.apiKey}`;
+
+    this.httpClient.get(url).pipe(catchError(e => { 
+      // Cleaning state
+      this.cityHistory.next([]);
+      this.infoWeather.next(this.infoWeatherDefault);
+      this.error.next(true);
+      this.loading.next(false); 
+      return throwError(() => e);
+    }))
+    .subscribe((res: any) => {
       const myRes: InfoWeather = {
         country: res.sys.country,
         cityName: res.name,
@@ -54,9 +68,9 @@ export class WeatherService {
 
   private historyWeatherHandler(info: InfoWeather, includeHistory: boolean) {
     // Save into Local Stoage
-    const localHistory: InfoWeather[] = JSON.parse(localStorage.getItem('WEATHER_HISTORY') as any) || [];
+    const localHistory: InfoWeather[] = JSON.parse(localStorage.getItem(this.WEATHER_HISTORY) as any) || [];
     localHistory.push(info);
-    localStorage.setItem('WEATHER_HISTORY', JSON.stringify(localHistory));
+    localStorage.setItem(this.WEATHER_HISTORY, JSON.stringify(localHistory));
     const filterHistory = includeHistory ? localHistory.filter(iw => iw.cityName === info.cityName) : [];
     this.cityHistory.next(filterHistory);
   }

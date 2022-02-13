@@ -10,6 +10,14 @@
 .consultar {
     margin-top: 15px;
 }
+
+.mat-form-field {
+    display: block;
+}
+
+.mat-raised-button.mat-primary {
+    width: 100%;
+}
   
 @media (min-width: 576px) {
     .flex-container {
